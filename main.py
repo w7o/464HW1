@@ -1,10 +1,11 @@
 import sys
 
-DEBUG = True
+DEBUG = False
 
-def __epsilon(n, states, transitions):
+def __epsilon(n, states, transitions): # helper function for returning all states from epsilon transitions
+    # referenced G4G's BFS implementation for this section
+    # https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/
     set_states = set(states)
-
     ret = set([])
     visited = [False] * n
     while set_states:
@@ -50,7 +51,7 @@ def main():
     alphabet = list(text.readline().strip())    # alphabet; guaranteed no repeats
 
     t = int(text.readline().strip())            # number of transitions
-    transitions = []
+    transitions = []                            # transitions stored as tuples
     for i in range(t):
         transitions.append(text.readline().strip().split(','))
     text.close()
@@ -71,7 +72,7 @@ def main():
         print(f'Using input \"{input_string}\"...')
     
     states = set([start])                  # start simulation at the start state
-    states = (__epsilon(n, states, transitions))
+    states = (__epsilon(n, states, transitions))    # expand to cover epsilon transition states
     i = 0                           # counter for grabbing correct character
     while(i < len(input_string)):
         char = input_string[i]      # char: current character being checked
@@ -80,18 +81,18 @@ def main():
         for curr in states:         # curr: curr state being checked
             for t in transitions:
                 if(int(t[0]) == curr) and t[1] == char:
-                    next_states.add(int(t[2]))
-        next_states = (__epsilon(n, next_states, transitions))
+                    next_states.add(int(t[2]))          # add all transitions with the correct curr state and symbol
+        next_states = (__epsilon(n, next_states, transitions)) # expand to cover epsilon transition states
         states = next_states
-        if(len(states) == 0):
+        if(len(states) == 0):       # no more states to explore = false
             print("False")
             return 0
         i += 1
     for accept_state in accept:
-        if accept_state in states:
+        if accept_state in states:      # found possible route to accept state
             print("True")
-            return 1
-    print("False")
+            return 0
+    print("False")          # no possible routes to accept state
     return 0
 
 
