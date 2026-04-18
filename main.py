@@ -1,3 +1,7 @@
+'''
+usage: python main.py {nfa file} {string}
+'''
+
 import sys
 
 DEBUG = False
